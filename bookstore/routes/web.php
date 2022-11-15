@@ -28,7 +28,7 @@ Route::get('/dashboard', function () {
 //ADMIN
 Route::middleware( ['admin'])->group(function () {
     //books
-    Route::get('/api/books/{id}', [BookController::class, 'show']);
+    
     Route::post('/api/books', [BookController::class, 'store']);
     Route::put('/api/books/{id}', [BookController::class, 'update']);
     Route::delete('/api/books/{id}', [BookController::class, 'destroy']);
@@ -43,6 +43,7 @@ Route::middleware( ['admin'])->group(function () {
 });
 
 //SIMPLE USER
+Route::get('/api/books/', [BookController::class, 'index']);
 Route::middleware(['auth.basic'])->group(function () {
     
     //user   
@@ -62,5 +63,12 @@ Route::put('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::clas
 Route::patch('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'update']);
 Route::post('/api/lendings', [LendingController::class, 'store']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
+route::get('/api/book_Copy_Count/{title}', [CopyController::class, 'bookCopyCount']);
+route::get('/api/hard_cover/{hardcovered}',[CopyController::class,'hardCover']);
+route::get('/api/publication_year/{publication}',[CopyController::class,'KiadasEv']);
+route::get('/api/Kint_Van_E/{status}',[CopyController::class,'KintVanE']);
+route::get('/api/bizonyRak/{ev}/{id}',[CopyController::class,'bizonyRak']);
+route::get('/api/adottKonyv/{id}', [CopyController::class,'addotKonyvAdatai']);
+
 
 require __DIR__.'/auth.php';

@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Copy;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CopyController extends Controller
 {
@@ -43,6 +44,64 @@ class CopyController extends Controller
         $copy->status = $request->status;
         $copy->save();        
     }
+    
+    public function bookCopyCount($title){
+        $copies = DB::table('copies as c')
+        -> join('books as b', 'c.book_id', '=', 'b.book_id')
+        ->where('b.title', '=', $title)
+        ->count();
+        return $copies;
+    }
+
+    public function hardCover($hardcover){
+        $copies = DB::table('copies as c')
+        ->select('b.author', 'b.title')
+        ->join('books as b', 'c.book_id', '=', 'b.book_id')
+        ->where('c.hardcovered', '=', $hardcover)
+        ->get();
+        return $copies;
+    }
+
+    public function KiadasEv($ev){
+        $copies = DB::table('copies as c')
+        ->select('b.author', 'b.title')
+        ->join('books as b', 'c.book_id', '=', 'b.book_id')
+        ->where('c.publication', '=', $ev)
+        ->get();
+        return $copies; 
+    }
+
+    public function KintVanE($status){
+        $copies = DB::table('copies as c')
+        ->where('c.status', '=', 0)
+        ->orWhere('c.status', '=', 2) 
+        ->count();
+        return $copies;
+        
+    }
+
+    public function bizonyRak($ev,$id){
+        $copies = DB::table('copies as c')
+        ->where('c.publication', '=', $ev)
+        ->where('c.book_id', '=', $id)
+        ->where('c.status', '=', 0)
+        ->orwhere('c.status', '=', 2)
+        ->count();
+        return $copies;
+        }
+
+    public function addotKonyvAdatai($id){
+        $copies = DB::table('copies as c')
+        ->select('user_id', 'start')
+        ->join('lendings as l', 'c.copy_id', '=', 'l.copy_id')
+        ->where('c.book_id', '=', $id)
+        ->get();
+        return $copies;
+    } 
+
+    
+
+
 
     public function copies_pieces($title)
     {	
